@@ -1,0 +1,151 @@
+<div class="dashboard-container">
+
+  <div class="sidebar">
+    <div class="logo">
+      <span>🏦</span>
+      <div>
+        <div class="logo-title">STB</div>
+        <div class="logo-sub">Réclamations</div>
+      </div>
+    </div>
+    <nav class="nav">
+      <div class="nav-item" (click)="navigate('/dashboard')">📊 Tableau de bord</div>
+      <div class="nav-item active" (click)="navigate('/reclamations')">📋 Réclamations</div>
+      @if (role === 'admin') {
+        <div class="nav-item" (click)="navigate('/admin/users')">👥 Utilisateurs</div>
+      }
+    </nav>
+    <div class="sidebar-footer">
+      <div class="nav-item" (click)="logout()">🚪 Déconnexion</div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <button class="btn-back" (click)="navigate('/reclamations')">← Retour</button>
+      <h1 class="page-title">Détail réclamation</h1>
+    </div>
+
+    <div class="content">
+
+      @if (loading) {
+        <div style="text-align:center;padding:48px;color:#8b92b8">
+          Chargement...
+        </div>
+      }
+
+      @if (!loading && reclamation) {
+        <div class="detail-grid">
+
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">📋 Informations</span>
+              <span class="badge badge-{{ reclamation.statut }}">{{ reclamation.statut }}</span>
+            </div>
+            <div class="card-body">
+              <div class="info-row">
+                <span class="info-label">Titre</span>
+                <span class="info-value">{{ reclamation.titre }}</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Description</span>
+                <span class="info-value">{{ reclamation.description }}</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Catégorie</span>
+                <span class="info-value">{{ reclamation.categorie }}</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Priorité</span>
+                <span class="badge badge-{{ reclamation.priorite }}">{{ reclamation.priorite }}</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Créé par</span>
+                <span class="info-value">{{ reclamation.createur }}</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Technicien</span>
+                <span class="info-value">{{ reclamation.technicien || 'Non assigné' }}</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Date création</span>
+                <span class="info-value">{{ reclamation.created_at | date:'dd/MM/yyyy HH:mm' }}</span>
+              </div>
+            </div>
+          </div>
+
+          @if (role === 'technicien') {
+            <div class="card">
+              <div class="card-header">
+                <span class="card-title">⚙️ Actions</span>
+              </div>
+              <div class="card-body">
+                @if (reclamation.statut === 'nouvelle') {
+                  <button class="btn-assign" (click)="assignerReclamation()">
+                    🔧 Prendre en charge
+                  </button>
+                }
+                @if (reclamation.statut !== 'nouvelle') {
+                  <div class="form-group">
+                    <label>Changer le statut</label>
+                    <select [(ngModel)]="nouveauStatut" class="form-input">
+                      @for (s of statuts; track s) {
+                        <option [value]="s">{{ s }}</option>
+                      }
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Commentaire</label>
+                    <textarea
+                      [(ngModel)]="commentaire"
+                      placeholder="Ajouter un commentaire..."
+                      class="form-input"
+                      rows="3">
+                    </textarea>
+                  </div>
+                  <button class="btn-submit" (click)="updateStatut()">
+                    💾 Mettre à jour
+                  </button>
+                }
+                @if (successMessage) {
+                  <div class="success-message">✅ {{ successMessage }}</div>
+                }
+                @if (errorMessage) {
+                  <div class="error-message">⚠️ {{ errorMessage }}</div>
+                }
+              </div>
+            </div>
+          }
+
+        </div>
+
+        <div class="card" style="margin-top:16px">
+          <div class="card-header">
+            <span class="card-title">🕐 Historique</span>
+          </div>
+          <div class="historique-list">
+            @for (h of historique; track h.id) {
+              <div class="historique-item">
+                <div class="historique-dot"></div>
+                <div class="historique-content">
+                  <div class="historique-text">
+                    <strong>{{ h.acteur }}</strong> —
+                    @if (h.ancien_statut) {
+                      <span>{{ h.ancien_statut }} → </span>
+                    }
+                    <span class="badge badge-{{ h.nouveau_statut }}">{{ h.nouveau_statut }}</span>
+                  </div>
+                  @if (h.commentaire) {
+                    <div class="historique-comment">{{ h.commentaire }}</div>
+                  }
+                  <div class="historique-time">{{ h.created_at | date:'dd/MM/yyyy HH:mm' }}</div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+    </div>
+  </div>
+</div>

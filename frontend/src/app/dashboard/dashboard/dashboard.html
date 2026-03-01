@@ -1,0 +1,111 @@
+<div class="dashboard-container">
+
+  <div class="sidebar">
+    <div class="logo">
+      <span>🏦</span>
+      <div>
+        <div class="logo-title">STB</div>
+        <div class="logo-sub">Réclamations</div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <div class="nav-item active" (click)="navigate('/dashboard')">📊 Tableau de bord</div>
+      <div class="nav-item" (click)="navigate('/reclamations')">📋 Réclamations</div>
+      @if (role === 'admin') {
+        <div class="nav-item" (click)="navigate('/admin/users')">👥 Utilisateurs</div>
+      }
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="nav-item" (click)="logout()">🚪 Déconnexion</div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <h1 class="page-title">Tableau de bord</h1>
+    </div>
+
+    <div class="content">
+
+      @if (loading) {
+        <div style="text-align:center;padding:48px;color:#8b92b8">
+          Chargement...
+        </div>
+      }
+
+      @if (!loading) {
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon" style="background:rgba(79,110,247,0.15)">📋</div>
+            <div>
+              <div class="stat-value">{{ stats.total }}</div>
+              <div class="stat-label">Total</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background:rgba(52,152,219,0.15)">🆕</div>
+            <div>
+              <div class="stat-value">{{ stats.nouvelles }}</div>
+              <div class="stat-label">Nouvelles</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background:rgba(243,156,18,0.15)">⏳</div>
+            <div>
+              <div class="stat-value">{{ stats.en_cours }}</div>
+              <div class="stat-label">En cours</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background:rgba(46,204,113,0.15)">✅</div>
+            <div>
+              <div class="stat-value">{{ stats.resolues }}</div>
+              <div class="stat-label">Résolues</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Réclamations récentes</span>
+            <button class="btn-primary" (click)="navigate('/reclamations')">Voir tout</button>
+          </div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>#ID</th>
+                <th>Titre</th>
+                <th>Priorité</th>
+                <th>Statut</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (r of reclamations.slice(0,5); track r.id) {
+                <tr>
+                  <td>#{{ r.id }}</td>
+                  <td>{{ r.titre }}</td>
+                  <td><span class="badge badge-{{ r.priorite }}">{{ r.priorite }}</span></td>
+                  <td><span class="badge badge-{{ r.statut }}">{{ r.statut }}</span></td>
+                  <td>{{ r.created_at | date:'dd/MM/yyyy' }}</td>
+                </tr>
+              }
+              @if (reclamations.length === 0) {
+                <tr>
+                  <td colspan="5" style="text-align:center;color:#8b92b8;padding:24px">
+                    Aucune réclamation
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+      }
+
+    </div>
+  </div>
+</div>

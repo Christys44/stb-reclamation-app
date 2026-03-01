@@ -1,0 +1,121 @@
+<div class="dashboard-container">
+
+  <div class="sidebar">
+    <div class="logo">
+      <span>🏦</span>
+      <div>
+        <div class="logo-title">STB</div>
+        <div class="logo-sub">Réclamations</div>
+      </div>
+    </div>
+    <nav class="nav">
+      <div class="nav-item" (click)="navigate('/dashboard')">📊 Tableau de bord</div>
+      <div class="nav-item" (click)="navigate('/reclamations')">📋 Réclamations</div>
+      <div class="nav-item active" (click)="navigate('/admin/users')">👥 Utilisateurs</div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="nav-item" (click)="logout()">🚪 Déconnexion</div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <h1 class="page-title">👥 Gestion des utilisateurs</h1>
+    </div>
+
+    <div class="content">
+
+      @if (successMessage) {
+        <div class="success-message">✅ {{ successMessage }}</div>
+      }
+      @if (errorMessage) {
+        <div class="error-message">⚠️ {{ errorMessage }}</div>
+      }
+
+      <div class="card">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>#ID</th>
+              <th>Nom</th>
+              <th>Email</th>
+              <th>Rôle</th>
+              <th>Statut</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @if (loading) {
+              <tr>
+                <td colspan="6" style="text-align:center;padding:24px;color:#8b92b8">
+                  Chargement...
+                </td>
+              </tr>
+            }
+
+            @for (user of users; track user.id) {
+              <tr>
+                <td>#{{ user.id }}</td>
+                <td>
+                  @if (editingUser?.id !== user.id) {
+                    <span>{{ user.nom }}</span>
+                  } @else {
+                    <input [(ngModel)]="editingUser.nom" class="input-edit" />
+                  }
+                </td>
+                <td>
+                  @if (editingUser?.id !== user.id) {
+                    <span>{{ user.email }}</span>
+                  } @else {
+                    <input [(ngModel)]="editingUser.email" class="input-edit" />
+                  }
+                </td>
+                <td>
+                  @if (editingUser?.id !== user.id) {
+                    <span class="badge badge-{{ user.role }}">{{ user.role }}</span>
+                  } @else {
+                    <select [(ngModel)]="editingUser.role" class="input-edit">
+                      <option value="personnel_stb">personnel_stb</option>
+                      <option value="technicien">technicien</option>
+                      <option value="admin">admin</option>
+                    </select>
+                  }
+                </td>
+                <td>
+                  <span class="badge"
+                    [class.badge-active]="user.actif"
+                    [class.badge-inactive]="!user.actif">
+                    {{ user.actif ? 'Actif' : 'Inactif' }}
+                  </span>
+                </td>
+                <td class="actions">
+                  @if (editingUser?.id !== user.id) {
+                    <button class="btn-edit" (click)="startEdit(user)">✏️ Modifier</button>
+                    <button class="btn-toggle"
+                      [class.btn-danger]="user.actif"
+                      [class.btn-success]="!user.actif"
+                      (click)="toggleActif(user)">
+                      {{ user.actif ? '🔴 Désactiver' : '🟢 Activer' }}
+                    </button>
+                  } @else {
+                    <button class="btn-save" (click)="saveEdit()">💾 Sauver</button>
+                    <button class="btn-cancel" (click)="cancelEdit()">✖ Annuler</button>
+                  }
+                </td>
+              </tr>
+            }
+
+            @if (!loading && users.length === 0) {
+              <tr>
+                <td colspan="6" style="text-align:center;padding:24px;color:#8b92b8">
+                  Aucun utilisateur trouvé
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>

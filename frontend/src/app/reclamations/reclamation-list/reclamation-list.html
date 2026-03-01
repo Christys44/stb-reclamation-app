@@ -1,0 +1,170 @@
+<div class="dashboard-container">
+
+  <div class="sidebar">
+    <div class="logo">
+      <span>🏦</span>
+      <div>
+        <div class="logo-title">STB</div>
+        <div class="logo-sub">Réclamations</div>
+      </div>
+    </div>
+    <nav class="nav">
+      <div class="nav-item" (click)="navigate('/dashboard')">📊 Tableau de bord</div>
+      <div class="nav-item active" (click)="navigate('/reclamations')">📋 Réclamations</div>
+      @if (role === 'admin') {
+        <div class="nav-item" (click)="navigate('/admin/users')">👥 Utilisateurs</div>
+      }
+    </nav>
+    <div class="sidebar-footer">
+      <div class="nav-item" (click)="logout()">🚪 Déconnexion</div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <h1 class="page-title">Réclamations</h1>
+      @if (role === 'personnel_stb') {
+        <button class="btn-primary" (click)="navigate('/reclamations/new')">
+          ＋ Nouvelle réclamation
+        </button>
+      }
+    </div>
+
+    <div class="content">
+
+      <div class="filtres-card">
+        <div class="filtres-row">
+
+          <div class="filtre-group">
+            <label>🔍 Recherche</label>
+            <input
+              type="text"
+              [(ngModel)]="filtreRecherche"
+              (ngModelChange)="appliquerFiltres()"
+              placeholder="Rechercher un titre..."
+              class="filtre-input"
+            />
+          </div>
+
+          <div class="filtre-group">
+            <label>Statut</label>
+            <select [(ngModel)]="filtreStatut" (ngModelChange)="appliquerFiltres()" class="filtre-input">
+              <option value="">Tous</option>
+              @for (s of statuts.slice(1); track s) {
+                <option [value]="s">{{ s }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="filtre-group">
+            <label>Priorité</label>
+            <select [(ngModel)]="filtrePriorite" (ngModelChange)="appliquerFiltres()" class="filtre-input">
+              <option value="">Toutes</option>
+              @for (p of priorites.slice(1); track p) {
+                <option [value]="p">{{ p }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="filtre-group">
+            <label>Catégorie</label>
+            <select [(ngModel)]="filtreCategorie" (ngModelChange)="appliquerFiltres()" class="filtre-input">
+              <option value="">Toutes</option>
+              @for (c of categories.slice(1); track c) {
+                <option [value]="c">{{ c }}</option>
+              }
+            </select>
+          </div>
+
+          <button class="btn-reset" (click)="reinitialiserFiltres()">🔄 Réinitialiser</button>
+
+        </div>
+
+        <div class="filtres-info">
+          {{ reclamationsFiltrees.length }} réclamation(s) trouvée(s)
+        </div>
+      </div>
+
+      @if (loading) {
+        <div style="text-align:center;padding:48px;color:#8b92b8">
+          Chargement...
+        </div>
+      }
+
+      @if (!loading) {
+        <div class="card">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>#ID</th>
+                <th>Titre</th>
+                <th>Catégorie</th>
+                <th>Priorité</th>
+                <th>Statut</th>
+                <th>Date</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (r of reclamationsPaginees; track r.id) {
+                <tr>
+                  <td>#{{ r.id }}</td>
+                  <td>{{ r.titre }}</td>
+                  <td>{{ r.categorie }}</td>
+                  <td><span class="badge badge-{{ r.priorite }}">{{ r.priorite }}</span></td>
+                  <td><span class="badge badge-{{ r.statut }}">{{ r.statut }}</span></td>
+                  <td>{{ r.created_at | date:'dd/MM/yyyy' }}</td>
+                  <td>
+                    <button class="btn-detail" (click)="navigate('/reclamations/' + r.id)">
+                      👁️ Voir
+                    </button>
+                  </td>
+                </tr>
+              }
+              @if (reclamationsFiltrees.length === 0) {
+                <tr>
+                  <td colspan="7" style="text-align:center;padding:24px;color:#8b92b8">
+                    Aucune réclamation trouvée
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+
+          @if (totalPages > 1) {
+            <div class="pagination">
+              <button
+                class="page-btn"
+                (click)="changerPage(pageCourante - 1)"
+                [disabled]="pageCourante === 1">
+                ← Précédent
+              </button>
+
+              @for (page of pages; track page) {
+                <button
+                  class="page-btn"
+                  [class.active]="page === pageCourante"
+                  (click)="changerPage(page)">
+                  {{ page }}
+                </button>
+              }
+
+              <button
+                class="page-btn"
+                (click)="changerPage(pageCourante + 1)"
+                [disabled]="pageCourante === totalPages">
+                Suivant →
+              </button>
+
+              <span class="page-info">
+                Page {{ pageCourante }} / {{ totalPages }} — {{ reclamationsFiltrees.length }} résultat(s)
+              </span>
+            </div>
+          }
+
+        </div>
+      }
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,182 @@
+.dashboard-container
+  display: flex
+  height: 100vh
+  background: #0f1117
+  color: #e8eaf6
+
+.sidebar
+  width: 240px
+  background: #1a1d2e
+  border-right: 1px solid #2a2f4a
+  display: flex
+  flex-direction: column
+  padding: 20px 0
+  flex-shrink: 0
+
+.logo
+  display: flex
+  align-items: center
+  gap: 10px
+  padding: 0 20px 24px
+  border-bottom: 1px solid #2a2f4a
+  margin-bottom: 16px
+  font-size: 24px
+
+  .logo-title
+    font-size: 16px
+    font-weight: 700
+    color: #4f6ef7
+
+  .logo-sub
+    font-size: 11px
+    color: #8b92b8
+
+.nav
+  padding: 0 12px
+  flex: 1
+
+.nav-item
+  padding: 10px 12px
+  border-radius: 8px
+  cursor: pointer
+  font-size: 13px
+  color: #8b92b8
+  margin-bottom: 4px
+  transition: all 0.2s
+
+  &:hover
+    background: #1e2235
+    color: #e8eaf6
+
+  &.active
+    background: #4f6ef7
+    color: white
+
+.sidebar-footer
+  padding: 16px 12px
+  border-top: 1px solid #2a2f4a
+
+.main
+  flex: 1
+  display: flex
+  flex-direction: column
+  overflow: hidden
+
+.topbar
+  background: #1a1d2e
+  border-bottom: 1px solid #2a2f4a
+  padding: 0 24px
+  height: 56px
+  display: flex
+  align-items: center
+  gap: 16px
+
+.page-title
+  font-size: 16px
+  font-weight: 600
+
+.btn-back
+  background: transparent
+  border: 1px solid #2a2f4a
+  color: #8b92b8
+  padding: 6px 14px
+  border-radius: 8px
+  font-size: 13px
+  cursor: pointer
+  transition: all 0.2s
+
+  &:hover
+    border-color: #4f6ef7
+    color: #4f6ef7
+
+.content
+  flex: 1
+  overflow-y: auto
+  padding: 24px
+
+.form-card
+  background: #1e2235
+  border: 1px solid #2a2f4a
+  border-radius: 12px
+  padding: 32px
+  max-width: 700px
+
+.form-group
+  margin-bottom: 20px
+  flex: 1
+
+  label
+    display: block
+    font-size: 13px
+    color: #8b92b8
+    margin-bottom: 8px
+    font-weight: 500
+
+.form-input
+  width: 100%
+  background: #0f1117
+  border: 1px solid #2a2f4a
+  border-radius: 8px
+  padding: 10px 14px
+  color: #e8eaf6
+  font-size: 14px
+  outline: none
+  box-sizing: border-box
+  transition: border 0.2s
+  font-family: 'Segoe UI', sans-serif
+
+  &:focus
+    border-color: #4f6ef7
+
+  option
+    background: #1e2235
+
+.form-row
+  display: flex
+  gap: 16px
+
+.error-message
+  background: rgba(231, 76, 60, 0.1)
+  border: 1px solid rgba(231, 76, 60, 0.3)
+  color: #e74c3c
+  padding: 10px 14px
+  border-radius: 8px
+  font-size: 13px
+  margin-bottom: 20px
+
+.form-actions
+  display: flex
+  gap: 12px
+  justify-content: flex-end
+
+.btn-cancel
+  background: transparent
+  border: 1px solid #2a2f4a
+  color: #8b92b8
+  padding: 10px 20px
+  border-radius: 8px
+  font-size: 14px
+  cursor: pointer
+  transition: all 0.2s
+
+  &:hover
+    border-color: #e74c3c
+    color: #e74c3c
+
+.btn-submit
+  background: #4f6ef7
+  color: white
+  border: none
+  padding: 10px 24px
+  border-radius: 8px
+  font-size: 14px
+  font-weight: 600
+  cursor: pointer
+  transition: all 0.2s
+
+  &:hover:not(:disabled)
+    background: #6c85ff
+
+  &:disabled
+    opacity: 0.6
+    cursor: not-allowed

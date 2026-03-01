@@ -1,0 +1,84 @@
+<div class="dashboard-container">
+
+  <div class="sidebar">
+    <div class="logo">
+      <span>🏦</span>
+      <div>
+        <div class="logo-title">STB</div>
+        <div class="logo-sub">Réclamations</div>
+      </div>
+    </div>
+    <nav class="nav">
+      <div class="nav-item" (click)="navigate('/dashboard')">📊 Tableau de bord</div>
+      <div class="nav-item active" (click)="navigate('/reclamations')">📋 Réclamations</div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="nav-item" (click)="logout()">🚪 Déconnexion</div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <button class="btn-back" (click)="navigate('/reclamations')">← Retour</button>
+      <h1 class="page-title">Nouvelle réclamation</h1>
+    </div>
+
+    <div class="content">
+      <div class="form-card">
+
+        <div class="form-group">
+          <label>Titre *</label>
+          <input
+            type="text"
+            [(ngModel)]="titre"
+            placeholder="Ex: Panne réseau bureau 3"
+            class="form-input"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Description *</label>
+          <textarea
+            [(ngModel)]="description"
+            placeholder="Décrivez le problème en détail..."
+            class="form-input"
+            rows="4">
+          </textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Catégorie *</label>
+            <select [(ngModel)]="categorie" class="form-input">
+              <option value="">-- Choisir --</option>
+              @for (c of categories; track c) {
+                <option [value]="c">{{ c }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Priorité</label>
+            <select [(ngModel)]="priorite" class="form-input">
+              @for (p of priorites; track p) {
+                <option [value]="p">{{ p }}</option>
+              }
+            </select>
+          </div>
+        </div>
+
+        @if (errorMessage) {
+          <div class="error-message">⚠️ {{ errorMessage }}</div>
+        }
+
+        <div class="form-actions">
+          <button class="btn-cancel" (click)="navigate('/reclamations')">Annuler</button>
+          <button class="btn-submit" (click)="onSubmit()" [disabled]="loading">
+            {{ loading ? 'Envoi...' : '✅ Soumettre' }}
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
